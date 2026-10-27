@@ -1,24 +1,24 @@
 /* ============================================================
    config.js — global site configuration
    ------------------------------------------------------------
-   CLOUD MODE (optional): paste your Firebase config object below
-   to enable login + sync across devices. You can also paste it
-   later from the in-app Settings panel (stored on each device).
+   CLOUD MODE: this project's Firebase config (public by design —
+   Firebase web API keys are identifiers, not secrets; security
+   is enforced by the Firestore rules in the Firebase console).
 
-   Example:
-   window.SITE_CONFIG = {
-     firebase: {
-       apiKey: "...",
-       authDomain: "...",
-       projectId: "...",
-       storageBucket: "...",
-       messagingSenderId: "...",
-       appId: "..."
-     }
-   };
+   Create the owner account on the live site (secret gesture →
+   Sign in → Create account), then put your Firebase UID in
+   ownerUid below to hide the public "Create account" button and
+   lock Firestore writes to your account only.
    ============================================================ */
 window.SITE_CONFIG = window.SITE_CONFIG || {
-  firebase: null,
+  firebase: {
+    apiKey: "AIzaSyDj5T9r67OScPshZ-R7mSF05NRYJu8aswg",
+    authDomain: "bio-website-199b4.firebaseapp.com",
+    projectId: "bio-website-199b4",
+    storageBucket: "bio-website-199b4.firebasestorage.app",
+    messagingSenderId: "229596316593",
+    appId: "1:229596316593:web:38d665275c1e6a63177390"
+  },
   /* After you create your owner account, put your Firebase UID here
      (console → Authentication → Users → UID). It hides the public
      "Create account" button; Firestore rules then accept writes from

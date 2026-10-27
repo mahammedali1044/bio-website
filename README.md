@@ -99,54 +99,38 @@ The site is 100% static — any static host works.
 
 ---
 
-## 5. Cloud mode — one login, all devices (optional, free)
+## 5. Cloud mode — one login, all devices (active)
 
-Use Firebase (Google's free tier) so your site + files live in the cloud and follow your
-login to any phone/PC.
+Your site now syncs through Firebase (Google's free Spark tier): edits you make while
+signed in go to Firestore, and **every visitor on phone or desktop sees them on their
+next page load** — no git push needed.
 
-1. Go to https://console.firebase.google.com → **Add project** (no analytics needed).
-2. In the project: **Build → Authentication → Get started → Sign-in method → Email/Password → Enable**.
-3. **Build → Firestore Database → Create database** (production mode, pick a nearby region).
-4. **Build → Storage → Get started** (production mode).
-5. **Project settings → General → Your apps → Web (</>)** → register app → copy the
-   `firebaseConfig` object (it looks like `{ apiKey: "...", authDomain: "...", ... }`).
-6. On your site: **⚙ Settings → Cloud sync** → paste that object → **Connect & reload**.
-7. Open the secret owner panel (type `owner` / long-press ⚡) → **Create account**
-   with your email + password.
+**What's already configured** (project `bio-website-199b4`):
+- `firebaseConfig` committed in `assets/js/config.js` → cloud mode is on for everyone
+- Firestore database in **asia-south1** (production mode), document `portfolio/main`
+- Authentication → **Email/Password** enabled
+- Firestore rules: public **read**, authenticated **write**
 
-**Set the security rules** (console → Firestore → Rules and Storage → Rules):
+**Your daily workflow:**
+1. Open the site → secret gesture (type `owner` / long-press ⚡) → **Sign in**
+   (email + password).
+2. Edit anything → **Save** (or it autosaves) → **"Saved to cloud"** toast.
+3. Every visitor sees the update on their next load. No git, no deploy.
 
-Firestore rules:
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /portfolio/{doc} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-```
+**To lock writes to your account only** (recommended once your account exists):
+console → Authentication → Users → copy your UID → replace `request.auth != null`
+with `request.auth.uid == "YOUR_UID"` in the Firestore rules → Publish, and put the
+same UID in `assets/js/config.js` (`ownerUid: "YOUR_UID"`). That also hides the
+public "Create account" button, so nobody else can ever create an account.
 
-> 🔒 **Lock it to your account only** (recommended): after your owner account exists,
-> copy your UID (console → **Authentication → Users → UID**) and replace
-> `request.auth != null` with `request.auth.uid == "YOUR_UID"` above, then put the
-> same UID in `assets/js/config.js` (`ownerUid: "YOUR_UID"`). That hides the public
-> "Create account" button **and** makes Firestore reject every write except yours.
+**Firebase Storage** (for photo/PDF uploads in cloud mode) is optional — it may ask
+for Google's pay-as-you-go Blaze card. Text/data sync works without it; uploads will
+show an error until Storage is enabled. Your profile photo ships with the site
+(`images/avatar.jpg`) and always works.
 
-Storage rules:
-```
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /files/{file} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-```
+> **Note:** while signed out, visitors see the site read-only (cloud data, no edit
+> controls). Your old device passcode still works as a fallback on any device where
+> cloud sign-in is not available — it only unlocks that device.
 
 *Public read = recruiters see the site without logging in. Writes require your login.*
 
