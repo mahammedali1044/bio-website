@@ -26,8 +26,13 @@ for uploads, so prefer Option A.
 
 ## 2. Editing your site
 
-1. Click **Owner** (top-right). The first time, you create an **owner passcode** (min 4 characters).
-   Keep it safe — it unlocks editing on this device.
+1. **Open the secret owner panel** — visitors see no admin controls at all:
+   - **Desktop:** click anywhere on the page and type `owner`
+   - **Phone / mouse:** **press and hold the ⚡ logo** (top-left) for ~1 second
+
+   The first time, you create an **owner passcode** (min 4 characters).
+   Keep it safe — it unlocks editing on this device. While unlocked, a **Lock**
+   button appears top-right; clicking it hides every edit control again.
 2. Edit buttons (✎ / 🗑 / "+ Add …") appear on every section:
    - **Hero** — click the **✎ pencil** beside your name (or the name itself) to edit it, and click the
      **📷 camera badge** on your avatar to upload your own profile photo;
@@ -79,8 +84,9 @@ The site is 100% static — any static host works.
 
 **Vercel / Cloudflare Pages** — same idea: drag the folder in.
 
-> In local (passcode) mode, hosted visitors see your site read-only **unless** they click
-> **Owner** and set *their own* passcode — which only edits *their* browser, never yours.
+> In local (passcode) mode, hosted visitors see a clean read-only site with **no admin
+> controls at all** — the owner panel opens only via the secret gesture above. If someone
+> discovers the gesture and sets their own passcode, it only edits *their* browser, never yours.
 > For a proper shared login across your devices, use cloud mode below.
 
 ---
@@ -97,7 +103,8 @@ login to any phone/PC.
 5. **Project settings → General → Your apps → Web (</>)** → register app → copy the
    `firebaseConfig` object (it looks like `{ apiKey: "...", authDomain: "...", ... }`).
 6. On your site: **⚙ Settings → Cloud sync** → paste that object → **Connect & reload**.
-7. Click **Owner login → Create account** with your email + password.
+7. Open the secret owner panel (type `owner` / long-press ⚡) → **Create account**
+   with your email + password.
 
 **Set the security rules** (console → Firestore → Rules and Storage → Rules):
 

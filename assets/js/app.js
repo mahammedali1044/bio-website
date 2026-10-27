@@ -31,12 +31,63 @@ window.App = (function () {
     const exported = Store.mode === 'export';
     const owner = !exported && Auth.canEdit();
 
-    btn.classList.toggle('hidden', exported);
+    /* visitors NEVER see owner/admin controls — the button appears
+       only while the owner is unlocked (Lock / Sign out) */
+    btn.classList.toggle('hidden', exported || !owner);
     $$('[data-action="share"],[data-action="settings"]').forEach((el) => el.classList.toggle('hidden', !owner));
     if (exported) return;
 
     if (Store.mode === 'cloud') btn.textContent = Auth.user ? 'Sign out' : 'Sign in';
     else btn.textContent = owner ? 'Lock' : 'Owner';
+  }
+
+  /* ================= secret owner access =================
+     The owner panel is completely invisible to visitors.
+     Open it by either:
+       • typing  owner  anywhere on the page (desktop), or
+       • pressing and holding the ⚡ logo for ~1 second (phone/mouse).
+     A passcode (or cloud login) is still required after that.        */
+  function wireSecretOwner() {
+    if (Store.mode === 'export') return;
+
+    const openPanel = () => {
+      if (Store.mode === 'export' || Auth.canEdit()) return;
+      if (document.querySelector('#modal-root .modal')) return; // a modal is already open
+      toggleOwner();
+    };
+
+    /* type "owner" to open the hidden panel */
+    let buf = '';
+    let bufTimer = null;
+    document.addEventListener('keydown', (e) => {
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+      if (!e.key || e.key.length !== 1) return;
+      buf = (buf + e.key.toLowerCase()).slice(-8);
+      clearTimeout(bufTimer);
+      bufTimer = setTimeout(() => { buf = ''; }, 1500);
+      if (buf.endsWith('owner')) { buf = ''; openPanel(); }
+    });
+
+    /* long-press the brand logo to open the hidden panel (touch + mouse) */
+    const brand = document.querySelector('#topbar .brand');
+    if (brand) {
+      let timer = null;
+      let fired = false;
+      brand.addEventListener('pointerdown', () => {
+        fired = false;
+        clearTimeout(timer);
+        timer = setTimeout(() => { fired = true; openPanel(); }, 1000);
+      });
+      const cancel = () => clearTimeout(timer);
+      brand.addEventListener('pointerup', cancel);
+      brand.addEventListener('pointerleave', cancel);
+      brand.addEventListener('pointercancel', cancel);
+      brand.addEventListener('contextmenu', (e) => e.preventDefault());
+      brand.addEventListener('click', (e) => {
+        if (fired) { e.preventDefault(); e.stopPropagation(); fired = false; }
+      }, true);
+    }
   }
 
   /* ================= helpers ================= */
@@ -752,6 +803,7 @@ window.App = (function () {
     applyAccent();
     Auth.onChange(() => { updateOwnerBtn(); Render.all(); });
     wire();
+    wireSecretOwner();
     updateOwnerBtn();
     Render.all();
 
