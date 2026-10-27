@@ -30,6 +30,7 @@ window.Store = (function () {
       profile: {
         name: 'Mahammed Ali B',
         role: 'ECE Engineer · Embedded & Hardware',
+        studying: 'B.Tech ECE · 2nd Year, 3rd Semester · GMIT University, Davanagere',
         kicker: 'Electronics & Communication',
         bio: 'Electronics & Communication engineering student focused on embedded systems, PCB design and IoT. Every project, experiment and milestone I collect lives right here — code, slides, photos and videos included.',
         email: 'you@example.com',

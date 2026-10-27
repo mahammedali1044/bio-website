@@ -156,6 +156,7 @@ window.App = (function () {
         { key: 'name', label: 'Full name', type: 'text', required: true },
         { key: 'role', label: 'Headline / role', type: 'text', placeholder: 'ECE Engineer · Embedded & Hardware' },
         { key: 'kicker', label: 'Small label above name', type: 'text', placeholder: 'Electronics & Communication' },
+        { key: 'studying', label: 'Currently studying', type: 'text', placeholder: 'B.Tech ECE · 2nd Year, 3rd Semester · GMIT University, Davanagere' },
         { key: 'bio', label: 'Bio', type: 'textarea', rows: 4 },
         { key: 'email', label: 'Email', type: 'email' },
         { key: 'phone', label: 'Phone', type: 'text' },

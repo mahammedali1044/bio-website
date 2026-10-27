@@ -614,6 +614,9 @@ window.Render = (function () {
             : '') +
         '</div>' +
         (p.role ? '<p class="hero-role">' + esc(p.role) + '</p>' : '') +
+        (p.studying
+          ? '<p class="hero-study">' + icon('doc') + '<span>' + esc(p.studying) + '</span></p>'
+          : '') +
         (p.bio ? '<p class="hero-bio">' + esc(p.bio) + '</p>' : '') +
         '<div class="hero-actions">' +
           '<a class="btn primary" href="#projects">View my work</a>' +
@@ -846,6 +849,7 @@ window.Render = (function () {
         '<div class="resume-doc">' + icon('doc') + '</div>' +
         '<h3>' + esc(p.name || 'My Resume') + '</h3>' +
         '<p class="muted">' + esc(p.role || '') + '</p>' +
+        (p.studying ? '<p class="muted" style="margin-top:4px">' + esc(p.studying) + '</p>' : '') +
         (r ? '<div class="resume-file">' + esc(r.name) + ' · ' + Files.fmtSize(r.size) + '</div>' : '<div class="resume-file">PDF</div>') +
         actions +
       '</div>';
