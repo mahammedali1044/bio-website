@@ -412,7 +412,7 @@ window.App = (function () {
         }
       });
     } else {
-      UI.formModal({
+      const m = UI.formModal({
         title: 'Owner unlock',
         submitLabel: 'Unlock',
         fields: [{ key: 'pass', label: 'Passcode', type: 'password', required: true }],
@@ -424,7 +424,50 @@ window.App = (function () {
           UI.toast('Unlocked — happy editing', 'ok');
         }
       });
+      /* forgot it? reset THIS device's passcode and set a new one */
+      const forgot = document.createElement('div');
+      forgot.className = 'hint';
+      forgot.style.marginTop = '10px';
+      forgot.innerHTML = '<a href="#" style="color:var(--danger)" data-action="forgot-passcode">Forgot passcode?</a>';
+      m.body.appendChild(forgot);
+      forgot.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const ok = await UI.confirm(
+          'Reset the passcode on THIS device? It will be cleared so you can set a new one. ' +
+          'Other devices and visitors are not affected.',
+          'Reset passcode'
+        );
+        if (!ok) return;
+        Auth.resetPasscode();
+        m.close();
+        passcodeModal(); // now opens "Set your owner passcode"
+      });
     }
+  }
+
+  /* change passcode: verify the current one, then set a new one.
+     Auth.setPasscode always generates a fresh salt + hash.        */
+  function changePasscodeModal() {
+    UI.formModal({
+      title: 'Change passcode',
+      submitLabel: 'Update passcode',
+      fields: [
+        { key: 'old', label: 'Current passcode', type: 'password', required: true },
+        { key: 'pass', label: 'New passcode (min 4 characters)', type: 'password', required: true },
+        { key: 'again', label: 'Repeat new passcode', type: 'password', required: true }
+      ],
+      values: { old: '', pass: '', again: '' },
+      onSubmit: async (v) => {
+        const ok = await Auth.verifyPasscode(v.old);
+        if (!ok) throw new Error('Current passcode is wrong');
+        if (v.pass.length < 4) throw new Error('Use at least 4 characters');
+        if (v.pass !== v.again) throw new Error('New passcodes do not match');
+        if (v.pass === v.old) throw new Error('New passcode must differ from the current one');
+        await Auth.setPasscode(v.pass);
+        updateOwnerBtn(); Render.all();
+        UI.toast('Passcode updated', 'ok');
+      }
+    });
   }
 
   function signInModal() {
@@ -714,7 +757,7 @@ window.App = (function () {
           }
         });
         break;
-      case 'change-passcode': passcodeModal(); break;
+      case 'change-passcode': Auth.hasPasscode() ? changePasscodeModal() : passcodeModal(); break;
       case 'sign-out-now':
         Auth.signOut().catch(() => {});
         document.getElementById('modal-root').innerHTML = '';

@@ -506,6 +506,15 @@ window.Auth = (function () {
     return true;
   }
   function hasPasscode() { return !!localStorage.getItem(LS_HASH); }
+  /* clears the passcode stored on THIS device only (visitors and your
+     other devices are untouched) — used by "Forgot passcode?" */
+  function resetPasscode() {
+    localStorage.removeItem(LS_SALT);
+    localStorage.removeItem(LS_HASH);
+    localStorage.removeItem(LS_UNLOCK);
+    state.unlocked = false;
+    emit();
+  }
   async function verifyPasscode(pass) {
     const salt = localStorage.getItem(LS_SALT) || '';
     const hash = await hashPass(salt, pass);
@@ -533,7 +542,7 @@ window.Auth = (function () {
     canEdit, isCloud,
     cloudConfigured, setCloudConfig, initCloud,
     signIn, signUp, signOut,
-    hasPasscode, setPasscode, verifyPasscode, unlock, lock,
+    hasPasscode, setPasscode, verifyPasscode, resetPasscode, unlock, lock,
     onChange
   };
 })();

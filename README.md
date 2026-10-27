@@ -33,6 +33,14 @@ for uploads, so prefer Option A.
    The first time, you create an **owner passcode** (min 4 characters).
    Keep it safe — it unlocks editing on this device. While unlocked, a **Lock**
    button appears top-right; clicking it hides every edit control again.
+
+   **Changing your passcode:** unlock → ⚙ Settings → Owner access → **Change passcode**
+   → enter the current passcode, then the new one twice.
+
+   **Forgot it?** On the unlock panel, click **Forgot passcode?** → confirm.
+   It clears the passcode **on this device only** so you can set a new one.
+   (Visitors and your other devices are never affected; the passcode cannot be
+   recovered because it's stored only as a salted hash.)
 2. Edit buttons (✎ / 🗑 / "+ Add …") appear on every section:
    - **Hero** — click the **✎ pencil** beside your name (or the name itself) to edit it, and click the
      **📷 camera badge** on your avatar to upload your own profile photo;
