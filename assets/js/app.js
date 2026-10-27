@@ -431,7 +431,8 @@ window.App = (function () {
     };
     passEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') sign.click(); });
 
-    m.foot.appendChild(create);
+    /* hide public sign-up once the owner UID is configured */
+    if (!(window.SITE_CONFIG && SITE_CONFIG.ownerUid)) m.foot.appendChild(create);
     m.foot.appendChild(cancel);
     m.foot.appendChild(sign);
   }

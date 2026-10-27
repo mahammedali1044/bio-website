@@ -18,5 +18,10 @@
    };
    ============================================================ */
 window.SITE_CONFIG = window.SITE_CONFIG || {
-  firebase: null
+  firebase: null,
+  /* After you create your owner account, put your Firebase UID here
+     (console → Authentication → Users → UID). It hides the public
+     "Create account" button; Firestore rules then accept writes from
+     your UID only. Leave null until the account exists. */
+  ownerUid: null
 };

@@ -114,6 +114,12 @@ service cloud.firestore {
 }
 ```
 
+> 🔒 **Lock it to your account only** (recommended): after your owner account exists,
+> copy your UID (console → **Authentication → Users → UID**) and replace
+> `request.auth != null` with `request.auth.uid == "YOUR_UID"` above, then put the
+> same UID in `assets/js/config.js` (`ownerUid: "YOUR_UID"`). That hides the public
+> "Create account" button **and** makes Firestore reject every write except yours.
+
 Storage rules:
 ```
 rules_version = '2';
