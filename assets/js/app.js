@@ -762,3 +762,31 @@ window.App = (function () {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => App.boot());
 else App.boot();
+
+/* ============================================================
+   Live update check — GitHub Pages caches HTML/assets for
+   10 minutes (max-age=600). Every open tab polls for a newer
+   data-build marker (fetched with a cache-busting query, so the
+   response is always fresh) and reloads when this build differs.
+   Bump data-build in index.html whenever you push an update.
+   ============================================================ */
+(function () {
+  'use strict';
+  if (window.__EXPORT__) return; // exported copies never poll
+
+  async function checkForNewBuild() {
+    try {
+      const r = await fetch('index.html?build=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) return;
+      const html = await r.text();
+      const m = /data-build="([^"]+)"/.exec(html);
+      const cur = document.documentElement.getAttribute('data-build');
+      if (m && cur && m[1] !== cur) {
+        // load through a unique query so the edge cache can never serve stale HTML
+        location.href = location.pathname + '?v=' + Date.now();
+      }
+    } catch (e) { /* offline or transient — try again next minute */ }
+  }
+
+  setInterval(checkForNewBuild, 60000);
+})();

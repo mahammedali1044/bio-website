@@ -33,14 +33,14 @@ window.Store = (function () {
         studying: 'B.Tech ECE · 2nd Year, 3rd Semester · GMIT University, Davanagere',
         kicker: 'Electronics & Communication',
         bio: 'Electronics & Communication engineering student focused on embedded systems, PCB design and IoT. Every project, experiment and milestone I collect lives right here — code, slides, photos and videos included.',
-        email: 'you@example.com',
+        email: 'mahammedali1044@gmail.com',
         phone: '',
         location: 'India',
-        avatar: null,
+        avatar: { id: 'seed-avatar', name: 'avatar.jpg', mime: 'image/jpeg', kind: 'image', size: 28831, src: 'images/avatar.jpg' },
         resume: null,
         links: [
-          { id: uid(), label: 'GitHub', type: 'github', url: 'https://github.com/yourhandle' },
-          { id: uid(), label: 'LinkedIn', type: 'linkedin', url: 'https://linkedin.com/in/yourhandle' }
+          { id: uid(), label: 'GitHub', type: 'github', url: 'https://github.com/mahammedali1044' },
+          { id: uid(), label: 'LinkedIn', type: 'linkedin', url: 'https://www.linkedin.com/in/mahammed-ali-b-b189443b5' }
         ]
       },
       progress: [
