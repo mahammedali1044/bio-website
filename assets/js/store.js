@@ -28,7 +28,7 @@ window.Store = (function () {
         accent: ''
       },
       profile: {
-        name: 'Maham',
+        name: 'Mahammed Ali B',
         role: 'ECE Engineer · Embedded & Hardware',
         kicker: 'Electronics & Communication',
         bio: 'Electronics & Communication engineering student focused on embedded systems, PCB design and IoT. Every project, experiment and milestone I collect lives right here — code, slides, photos and videos included.',
