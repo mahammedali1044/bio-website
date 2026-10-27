@@ -768,7 +768,8 @@ else App.boot();
    10 minutes (max-age=600). Every open tab polls for a newer
    data-build marker (fetched with a cache-busting query, so the
    response is always fresh) and reloads when this build differs.
-   Bump data-build in index.html whenever you push an update.
+   Bump data-build AND the ?v= number on every asset tag in
+   index.html whenever you push an update (keep them equal).
    ============================================================ */
 (function () {
   'use strict';
