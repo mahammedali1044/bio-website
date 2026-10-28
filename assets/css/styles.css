@@ -1,5 +1,5 @@
-﻿/* ============================================================
-   Portfolio â€” Minimal Ã— Apple Liquid Glass design system
+/* ============================================================
+   Portfolio — Minimal × Apple Liquid Glass design system
    Translucent materials, specular highlights, aurora substrate,
    spring-eased motion. Dark & light themes.
    ============================================================ */
@@ -279,7 +279,7 @@ button{font-family:inherit}
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   box-shadow:inset 0 1px 0 var(--glass-hi);
 }
-.hero-study svg{width:14px;height:14px;flex:none;color:var(--accent)}
+.hero-study svg{width:14px;height:14px;flex:none;fill:var(--accent);color:var(--accent)}
 .hero-study span{white-space:normal}
 .hero-bio{max-width:620px;color:var(--muted);margin:0 0 30px;font-size:16.5px}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:34px}

@@ -164,9 +164,19 @@ window.Store = (function () {
     if (!window.Auth || !Auth.user) return;          // visitors cannot write
     clearTimeout(cloudTimer);
     cloudTimer = setTimeout(() => {
+      saveLocal();                                    // keep an instant local mirror for offline/slow loads
+      const payload = sanitize(state.data);
+      /* Firestore documents are capped at 1 MB — check first so we can show
+         a clear message instead of a cryptic write failure. */
+      let bytes = 0;
+      try { bytes = new TextEncoder().encode(JSON.stringify(payload)).length; } catch (e) { bytes = 0; }
+      if (bytes > 1000000) {
+        if (window.UI) UI.toast('Cloud storage is full (' + Math.round(bytes / 1024) + ' KB of 1024 KB). Remove an uploaded file and try again.', 'err');
+        return;
+      }
       const db = firebase.firestore();
       db.collection('portfolio').doc('main')
-        .set(sanitize(state.data))
+        .set(payload)
         .then(() => { if (window.UI) UI.toast('Saved to cloud', 'ok'); })
         .catch((e) => { console.error(e); if (window.UI) UI.toast('Cloud save failed: ' + e.message, 'err'); });
     }, 600);
@@ -219,6 +229,7 @@ window.Store = (function () {
         .then((snap) => {
           if (snap.exists) {
             state.data = sanitize(snap.data());
+            saveLocal();                            // cache live data so slow/offline visits render it instantly
             if (window.Render) Render.all();   /* swap cached data for live cloud data */
           }
         })
@@ -339,7 +350,7 @@ window.Files = (function () {
       }
       /* 2) Fallback: embed the file as a data URL so it syncs to every
             device through Firestore like the rest of the portfolio. */
-      const MAX = 400 * 1024; /* keep the Firestore doc safely under 1 MB */
+      const MAX = 600 * 1024; /* keeps the Firestore doc safely under its 1 MB limit */
       if (file.size > MAX) {
         throw new Error('File too large for cloud sync (' + fmtSize(file.size) + '). Maximum is ' + fmtSize(MAX) + ' — use a smaller file or paste a link instead.');
       }

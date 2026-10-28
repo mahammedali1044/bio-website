@@ -125,7 +125,7 @@ public "Create account" button, so nobody else can ever create an account.
 
 **Firebase Storage** (optional, needs the paid Blaze card) is auto-detected. Without it,
 uploaded files (photos, PDFs, your resume) are embedded directly in Firestore as data
-URLs — **they sync to every device automatically.** Maximum file size is **400 KB** per
+URLs — **they sync to every device automatically.** Maximum file size is **600 KB** per
 file (keeps the shared document safely under Firestore's 1 MB limit); larger uploads are
 rejected with a clear message, so use a hosted link for big videos. Your profile photo
 ships with the site (`images/avatar.jpg`) and always works.
