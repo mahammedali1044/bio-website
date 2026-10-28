@@ -123,10 +123,12 @@ with `request.auth.uid == "YOUR_UID"` in the Firestore rules → Publish, and pu
 same UID in `assets/js/config.js` (`ownerUid: "YOUR_UID"`). That also hides the
 public "Create account" button, so nobody else can ever create an account.
 
-**Firebase Storage** (for photo/PDF uploads in cloud mode) is optional — it may ask
-for Google's pay-as-you-go Blaze card. Text/data sync works without it; uploads will
-show an error until Storage is enabled. Your profile photo ships with the site
-(`images/avatar.jpg`) and always works.
+**Firebase Storage** (optional, needs the paid Blaze card) is auto-detected. Without it,
+uploaded files (photos, PDFs, your resume) are embedded directly in Firestore as data
+URLs — **they sync to every device automatically.** Maximum file size is **400 KB** per
+file (keeps the shared document safely under Firestore's 1 MB limit); larger uploads are
+rejected with a clear message, so use a hosted link for big videos. Your profile photo
+ships with the site (`images/avatar.jpg`) and always works.
 
 > **Note:** while signed out, visitors see the site read-only (cloud data, no edit
 > controls). Your old device passcode still works as a fallback on any device where

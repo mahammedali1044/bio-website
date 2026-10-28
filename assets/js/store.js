@@ -197,29 +197,36 @@ window.Store = (function () {
       return state;
     }
 
-    const fbCfg = window.Auth ? Auth.cloudConfigured() : null;
-    if (fbCfg) {
-      const ok = await Auth.initCloud();
-      if (ok) {
-        state.mode = 'cloud';
-        try {
-          const snap = await firebase.firestore().collection('portfolio').doc('main').get();
-          if (snap.exists) state.data = sanitize(snap.data());
-          else state.data = loadLocal() || seed();
-        } catch (e) {
-          console.error(e);
-          state.data = loadLocal() || seed();
-          if (window.UI) UI.toast('Cloud read failed — check Firestore rules', 'warn');
-        }
-        state.ready = true;
-        return state;
-      }
-    }
-
-    state.mode = 'local';
+    /* Render instantly from the local cache (or seed data), then upgrade to
+       cloud in the background. A slow, blocked or flaky network must never
+       leave the page blank — content shows immediately either way. */
     state.data = loadLocal() || seed();
     state.ready = true;
+
+    const fbCfg = window.Auth ? Auth.cloudConfigured() : null;
+    if (fbCfg) upgradeToCloud();
+    else state.mode = 'local';
+
     return state;
+  }
+
+  /* Load Firebase + Firestore data without blocking first paint */
+  function upgradeToCloud() {
+    Auth.initCloud().then((ok) => {
+      if (!ok) return;                    // offline / blocked — keep cached data
+      state.mode = 'cloud';
+      return firebase.firestore().collection('portfolio').doc('main').get()
+        .then((snap) => {
+          if (snap.exists) {
+            state.data = sanitize(snap.data());
+            if (window.Render) Render.all();   /* swap cached data for live cloud data */
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          if (window.Auth && Auth.user && window.UI) UI.toast('Cloud read failed — showing cached data', 'warn');
+        });
+    }).catch((e) => console.error(e));
   }
 
   function reset() {
@@ -302,6 +309,7 @@ window.Files = (function () {
   }
 
   /* Store a File/Blob, return attachment descriptor */
+  let storageOk = null; /* null = unknown, true = works, false = unavailable */
   async function add(file) {
     const att = {
       id: Store.uid(),
@@ -312,11 +320,35 @@ window.Files = (function () {
       when: Date.now()
     };
 
-    if (Store.mode === 'cloud' && window.firebase && firebase.storage) {
-      const safe = att.name.replace(/[^\w.\-]+/g, '_');
-      const ref = firebase.storage().ref('files/' + att.id + '_' + safe);
-      await ref.put(file);
-      att.src = await ref.getDownloadURL();
+    if (Store.mode === 'cloud') {
+      /* 1) Try Firebase Storage first — used only if it is enabled on the
+            project (requires the paid Blaze plan). Probed once per session. */
+      if (storageOk !== false && window.firebase && firebase.storage) {
+        try {
+          const safe = att.name.replace(/[^\w.\-]+/g, '_');
+          const ref = firebase.storage().ref('files/' + att.id + '_' + safe);
+          const put = ref.put(file);
+          put.catch(() => {}); /* late failure is handled by the race below */
+          att.src = await Promise.race([
+            put.then(() => ref.getDownloadURL()),
+            new Promise((_, rej) => setTimeout(() => rej(new Error('storage-timeout')), 4000))
+          ]);
+          storageOk = true;
+          return att;
+        } catch (e) { storageOk = false; /* Storage not enabled — fall through */ }
+      }
+      /* 2) Fallback: embed the file as a data URL so it syncs to every
+            device through Firestore like the rest of the portfolio. */
+      const MAX = 400 * 1024; /* keep the Firestore doc safely under 1 MB */
+      if (file.size > MAX) {
+        throw new Error('File too large for cloud sync (' + fmtSize(file.size) + '). Maximum is ' + fmtSize(MAX) + ' — use a smaller file or paste a link instead.');
+      }
+      att.src = await new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result);
+        fr.onerror = () => reject(fr.error || new Error('Could not read the file'));
+        fr.readAsDataURL(file);
+      });
     } else {
       if (!IDB.available) throw new Error('Local file storage is unavailable in this browser. Use a local server or connect cloud mode.');
       await IDB.put(att.id, file);
@@ -390,7 +422,7 @@ window.Files = (function () {
       URL.revokeObjectURL(urlCache.get(att.id));
       urlCache.delete(att.id);
     }
-    if (att.src && Store.mode === 'cloud' && window.firebase && firebase.storage) {
+    if (att.src && Store.mode === 'cloud' && window.firebase && firebase.storage && att.src.indexOf('data:') !== 0) {
       try { await firebase.storage().refFromURL(att.src).delete(); } catch (e) { /* best effort */ }
     }
   }
@@ -451,7 +483,9 @@ window.Auth = (function () {
     const cfg = cloudConfigured();
     if (!cfg) return Promise.resolve(false);
 
-    initPromise = (async () => {
+    /* Timeout race: if the SDK (or network) hangs, we give up after 10s and
+       let the site keep running on cached/local data instead of stalling. */
+    const work = (async () => {
       try {
         const base = 'https://www.gstatic.com/firebasejs/10.12.2/';
         await loadScript(base + 'firebase-app-compat.js');
@@ -471,6 +505,10 @@ window.Auth = (function () {
         return false;
       }
     })();
+    initPromise = Promise.race([
+      work,
+      new Promise((res) => setTimeout(() => res(false), 10000))
+    ]);
     return initPromise;
   }
 

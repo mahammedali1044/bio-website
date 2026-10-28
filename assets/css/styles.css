@@ -1,5 +1,5 @@
-/* ============================================================
-   Portfolio — Minimal × Apple Liquid Glass design system
+﻿/* ============================================================
+   Portfolio â€” Minimal Ã— Apple Liquid Glass design system
    Translucent materials, specular highlights, aurora substrate,
    spring-eased motion. Dark & light themes.
    ============================================================ */
@@ -141,7 +141,7 @@ button{font-family:inherit}
   position:sticky;top:0;z-index:60;
   backdrop-filter:saturate(190%) blur(var(--glass-blur));
   -webkit-backdrop-filter:saturate(190%) blur(var(--glass-blur));
-  background:color-mix(in srgb,var(--bg) 62%,transparent);
+  background:rgba(6,6,8,.82);background:color-mix(in srgb,var(--bg) 62%,transparent);
   border-bottom:1px solid var(--glass-border);
   box-shadow:0 1px 0 var(--glass-hi) inset, 0 10px 30px -18px rgba(0,0,0,.35);
 }
@@ -200,14 +200,14 @@ button{font-family:inherit}
 .btn:active{transform:scale(.965)}
 .btn.primary{
   background:var(--accent-grad);border-color:transparent;color:#fff;
-  box-shadow:0 10px 26px -10px color-mix(in srgb,var(--accent) 65%,transparent), inset 0 1px 0 rgba(255,255,255,.32);
+  box-shadow:0 10px 26px -10px rgba(10,132,255,.65), inset 0 1px 0 rgba(255,255,255,.32);
 }
-.btn.primary:hover{filter:brightness(1.08);border-color:transparent;box-shadow:0 16px 34px -12px color-mix(in srgb,var(--accent) 75%,transparent), inset 0 1px 0 rgba(255,255,255,.32)}
+.btn.primary:hover{filter:brightness(1.08);border-color:transparent;box-shadow:0 16px 34px -12px rgba(10,132,255,.75), inset 0 1px 0 rgba(255,255,255,.32)}
 .btn.ghost{background:transparent;box-shadow:none}
 .btn.ghost:hover{background:var(--glass)}
 .btn.small{padding:6px 14px;font-size:13px}
 .btn.danger{background:transparent;border-color:transparent;color:var(--danger);box-shadow:none}
-.btn.danger:hover{background:color-mix(in srgb,var(--danger) 12%,transparent);border-color:transparent;box-shadow:none}
+.btn.danger:hover{background:rgba(255,69,58,.12);background:color-mix(in srgb,var(--danger) 12%,transparent);border-color:transparent;box-shadow:none}
 .btn.block{width:100%}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
 .btn .spinner{
@@ -227,8 +227,8 @@ button{font-family:inherit}
   color:#fff;display:grid;place-items:center;
   font-size:44px;font-weight:600;letter-spacing:-.02em;
   border:1px solid var(--glass-hi);
-  box-shadow:0 0 0 7px color-mix(in srgb,var(--glass) 60%,transparent),
-             0 24px 60px -18px color-mix(in srgb,var(--accent) 40%,transparent),
+  box-shadow:0 0 0 7px rgba(255,255,255,.06),0 0 0 7px color-mix(in srgb,var(--glass) 60%,transparent),
+             0 24px 60px -18px rgba(10,132,255,.4),
              var(--shadow-2);
   transition:transform .6s var(--e-out), box-shadow .6s var(--e-out);
 }
@@ -241,7 +241,7 @@ button{font-family:inherit}
   box-shadow:var(--shadow-2);
   transition:transform var(--t), box-shadow var(--t);
 }
-.avatar-edit:hover{transform:scale(1.14);box-shadow:0 10px 24px -8px color-mix(in srgb,var(--accent) 70%,transparent)}
+.avatar-edit:hover{transform:scale(1.14);box-shadow:0 10px 24px -8px rgba(10,132,255,.7)}
 .avatar-edit svg{width:16px;height:16px;fill:#fff}
 
 .eyebrow{
@@ -336,9 +336,9 @@ button{font-family:inherit}
 
 /* status */
 .status{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--muted)}
-.status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--muted) 18%,transparent)}
-.status.s-ok::before{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 18%,transparent)}
-.status.s-warn::before{background:var(--warn);box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 18%,transparent)}
+.status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none;box-shadow:0 0 0 3px rgba(154,154,162,.18),0 0 0 3px color-mix(in srgb,var(--muted) 18%,transparent)}
+.status.s-ok::before{background:var(--ok);box-shadow:0 0 0 3px rgba(48,209,88,.18),0 0 0 3px color-mix(in srgb,var(--ok) 18%,transparent)}
+.status.s-warn::before{background:var(--warn);box-shadow:0 0 0 3px rgba(255,214,10,.18),0 0 0 3px color-mix(in srgb,var(--warn) 18%,transparent)}
 .status.s-dim::before{background:var(--muted);opacity:.6}
 
 /* award rows */
@@ -390,7 +390,7 @@ button{font-family:inherit}
 }
 .card:hover .card-actions,.card:focus-within .card-actions{opacity:1;transform:none}
 @media (hover:none){.card-actions{opacity:1;transform:none}}
-.card-actions .btn{background:color-mix(in srgb,var(--bg) 60%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.card-actions .btn{background:rgba(6,6,8,.75);background:color-mix(in srgb,var(--bg) 60%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 
 /* ---------------- code ---------------- */
 .code-toolbar{display:flex;gap:12px;margin-bottom:30px;flex-wrap:wrap}
@@ -445,7 +445,7 @@ pre.code{
 .conn-tile:hover{
   border-color:var(--accent);text-decoration:none;
   transform:translateY(-3px);background:var(--glass-2);
-  box-shadow:inset 0 1px 0 var(--glass-hi), 0 18px 40px -16px color-mix(in srgb,var(--accent) 45%,transparent);
+  box-shadow:inset 0 1px 0 var(--glass-hi), 0 18px 40px -16px rgba(10,132,255,.45);
 }
 .conn-tile svg{width:20px;height:20px;fill:var(--muted);flex:none;transition:fill var(--t), transform var(--t)}
 .conn-tile:hover svg{fill:var(--accent);transform:scale(1.12)}
@@ -561,7 +561,7 @@ pre.code{
   border-radius:50%;cursor:pointer;font-size:16px;flex:none;
   transition:background var(--t), color var(--t), transform var(--t);
 }
-.lr-del:hover{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger);transform:scale(1.12)}
+.lr-del:hover{background:rgba(255,69,58,.14);background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger);transform:scale(1.12)}
 .add-row{
   align-self:flex-start;border:1.5px dashed var(--border-strong);background:transparent;
   color:var(--muted);font-weight:500;font-size:13.5px;padding:9px 18px;border-radius:999px;cursor:pointer;
@@ -594,16 +594,16 @@ pre.code{
 /* ---------------- toast ---------------- */
 #toast-root{position:fixed;right:20px;bottom:20px;z-index:200;display:flex;flex-direction:column;gap:9px;align-items:flex-end}
 .toast{
-  background:color-mix(in srgb,var(--text) 92%,transparent);color:var(--bg);
+  background:var(--text);background:color-mix(in srgb,var(--text) 92%,transparent);color:var(--bg);
   padding:13px 18px;border-radius:999px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.25), var(--shadow-2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 14px 34px -10px rgba(0,0,0,.45);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   font-size:14px;font-weight:500;max-width:340px;
   animation:toastin .45s var(--e-out);
 }
-.toast.err{background:color-mix(in srgb,var(--danger) 92%,transparent);color:#fff}
-.toast.warn{background:color-mix(in srgb,var(--warn) 92%,transparent);color:#1d1d1f}
-.toast.ok{background:color-mix(in srgb,var(--text) 92%,transparent);color:var(--bg)}
+.toast.err{background:var(--danger);background:color-mix(in srgb,var(--danger) 92%,transparent);color:#fff}
+.toast.warn{background:var(--warn);background:color-mix(in srgb,var(--warn) 92%,transparent);color:#1d1d1f}
+.toast.ok{background:var(--text);background:color-mix(in srgb,var(--text) 92%,transparent);color:var(--bg)}
 @keyframes toastin{from{opacity:0;transform:translateX(30px) scale(.94)}}
 
 /* ---------------- lightbox ---------------- */
@@ -639,7 +639,7 @@ pre.code{
 .fico{display:inline-flex;align-items:center;flex:none}
 .divider{height:1px;background:var(--glass-border);margin:20px 0;box-shadow:0 1px 0 var(--glass-hi)}
 .notice{
-  background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+  background:var(--accent-soft);border:1px solid rgba(10,132,255,.3);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
   border-radius:16px;padding:13px 16px;font-size:13.5px;color:var(--text);margin-bottom:16px;
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
 }
@@ -700,7 +700,7 @@ pre.code{
 @media (max-width:1040px){
   .nav{
     position:fixed;top:var(--topbar-h);left:0;right:0;flex-direction:column;gap:4px;
-    background:color-mix(in srgb,var(--bg) 78%,transparent);
+    background:rgba(6,6,8,.9);background:color-mix(in srgb,var(--bg) 78%,transparent);
     backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);
     border-bottom:1px solid var(--glass-border);
     padding:14px 4vw 22px;transform:translateY(-140%);transition:transform .45s var(--e-out);
