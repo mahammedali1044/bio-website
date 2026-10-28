@@ -887,3 +887,26 @@ else App.boot();
 
   setInterval(checkForNewBuild, 60000);
 })();
+
+/* ---------------- reveal-on-scroll (liquid glass motion) ---------------- */
+(function () {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('rv-on');
+  var SEL = '.section-head, .row-item, .card, .code-card, .conn-tile, .resume-block, .empty, .rows, .conn-grid';
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('rv-in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -5% 0px' });
+  function scan(root) {
+    if (!root || root.nodeType !== 1) return;
+    if (root.matches && root.matches(SEL) && !root.classList.contains('rv-in')) { root.classList.add('rv'); io.observe(root); }
+    if (root.querySelectorAll) root.querySelectorAll(SEL).forEach(function (el) {
+      if (!el.classList.contains('rv-in')) { el.classList.add('rv'); io.observe(el); }
+    });
+  }
+  scan(document.body);
+  new MutationObserver(function (muts) {
+    muts.forEach(function (m) { m.addedNodes.forEach(scan); });
+  }).observe(document.body, { childList: true, subtree: true });
+})();
