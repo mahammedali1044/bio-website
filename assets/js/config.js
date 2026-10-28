@@ -19,9 +19,8 @@ window.SITE_CONFIG = window.SITE_CONFIG || {
     messagingSenderId: "229596316593",
     appId: "1:229596316593:web:38d665275c1e6a63177390"
   },
-  /* After you create your owner account, put your Firebase UID here
-     (console → Authentication → Users → UID). It hides the public
-     "Create account" button; Firestore rules then accept writes from
-     your UID only. Leave null until the account exists. */
-  ownerUid: null
+  /* Your Firebase UID (console → Authentication → Users). Hides the
+     public "Create account" button; Firestore rules accept writes from
+     this UID only. */
+  ownerUid: "viFapXlxujdcywSaSWu8WFOU7vq2"
 };
