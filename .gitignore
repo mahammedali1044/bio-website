@@ -8,3 +8,6 @@ Desktop.ini
 *.swp
 .vscode/
 .idea/
+
+# Agent memory — local-only project instructions, never publish to the site
+AGENTS.md
